@@ -1,13 +1,37 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.3/p5.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.3/addons/p5.sound.min.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <meta charset="utf-8" />
+        <title>BLNKT</title>
     </head>
     <body>
-        <main></main>
+        <header class="header">
+            <a href="#" class="logo">BLNKT</a>
+
+            <nav class="navbar">
+                <a href="#">About</a>
+                <a href="#">Gallery</a>
+                <a href="#">Contact</a>
+        </header>
+        <div class="container">
+            <h2>Welcome! Here at BLNKT we help you design pattern references for your creative projects.</h2>
+            <br />
+            <p>Let's start by choosing the size of the BLNKT</p>
+            <input type="text" id="xInput" placeholder="Horizontal panels" />
+            <input type="text" id="yInput" placeholder="Vertical panels" />
+            <br />
+            <p>Next select a color and add it to the color pallet</p>
+            <p>Each color will be its own panel.</p>
+            <input type="color" id="colorPicker"/>
+            <button id="addColorButton">Add Color To Pallet</button>
+            <div class="color-pallet"></div>
+            <div class="slider"
+                <p>Adust the pattern size if needed.</p>
+                <input type="range" id="sizeSlider" min="200" max="800" value="400" />
+            </div>
+            <canvas id="myCanvas"></canvas>
+        </div>
         <script src="script.js"></script>
     </body>
 </html>
