@@ -31,7 +31,7 @@ function drawGrid() {
       let distX = Math.abs(x - centerX);
       let distY = Math.abs(y - centerY);
       let distance = Math.max(distX, distY);
-      let colorIndex = (distance + Math.min(distX, distY)) % userColors.length;
+      let colorIndex = (distance + Math.max(distX, distY)) % userColors.length;
       ctx.fillStyle = userColors[colorIndex];
       ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
     }
@@ -82,4 +82,31 @@ function updateColorPallet() {
     colorDiv.style.backgroundColor = color;
     colorPallet.appendChild(colorDiv);
   });
+}
+
+let selectedPattern = "diamondPattern"; // Set a default pattern
+
+function selectPattern(pattern) {
+  const dropdown = document.querySelector(".dropdown");
+  let text = dropdown.querySelector(".selected-pattern-message");
+
+  if (!text) {
+    text = document.createElement("p");
+    text.classList.add("selected-pattern-message");
+    dropdown.appendChild(text);
+  }
+
+  text.innerHTML = `You selected ${pattern}!`;
+}
+
+function getPatternAlgorithm(patternName) {
+  switch (patternName) {
+    case "diamondPattern":
+      return diamondPattern;
+    case "spiralPattern":
+      return spiralPattern;
+    // Add more pattern cases here
+    default:
+      return diamondPattern;
+  }
 }

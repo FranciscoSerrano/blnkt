@@ -10,9 +10,9 @@
             <a href="#" class="logo">BLNKT</a>
 
             <nav class="navbar">
-                <a href="#">About</a>
-                <a href="#">Gallery</a>
-                <a href="#">Contact</a>
+                <a href="https://i.giphy.com/4tlkVBk7mm6iY.webp">About</a>
+                <a href="https://c.tenor.com/7JbbkdTGA38AAAAd/tenor.gif">Gallery</a>
+                <a href="https://i.giphy.com/LXONhtCmN32YU.webp">Contact</a>
         </header>
         <div class="container">
             <h2>Welcome! Here at BLNKT we help you design pattern references for your creative projects.</h2>
@@ -26,6 +26,18 @@
             <input type="color" id="colorPicker"/>
             <button id="addColorButton">Add Color To Pallet</button>
             <div class="color-pallet"></div>
+            <br />
+            <div class="dropdown">
+                <p>Once you have a pallet you like, select the pattern you want it to be!</p>
+                <button class="dropdown-toggle">Select A Pattern</button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item" data-pattern="diamond" onclick="selectPattern(this.dataset.pattern)"">Diamond Pattern</a>
+                    <a href="#" class="dropdown-item" data-pattern="X" onclick="selectPattern(this.dataset.pattern)">X Pattern</a>
+                    <a href="#" class="dropdown-item" data-pattern="acorn" onclick="selectPattern(this.dataset.pattern)">Acorn Pattern</a>
+                    <a href="#" class="dropdown-item" data-pattern="no" onclick="selectPattern(this.dataset.pattern)">None of these actually work yet, Megan!</a>
+                    <!-- Add more pattern options here -->
+                </div>
+            </div>
             <div class="slider"
                 <p>Adust the pattern size if needed.</p>
                 <input type="range" id="sizeSlider" min="200" max="800" value="400" />
