@@ -1,7 +1,8 @@
 let canvas, ctx;
-let gridX, gridY;
+let gridX = 10,
+  gridY = 10;
 let canvasSize = 400;
-let userColors = [];
+let userColors = []; // Default to black and white
 let colorPicker;
 
 window.onload = function () {
@@ -22,21 +23,76 @@ window.onload = function () {
 };
 
 function drawGrid() {
+  const patternAlgorithm = getPatternAlgorithm(selectedPattern);
+  patternAlgorithm();
+}
+
+// ==== Start of Pattern Functions ====
+function diamondPattern() {
   let cellSize = Math.min(canvas.width / gridX, canvas.height / gridY);
-  let centerX = Math.floor(canvas.width / (2 * cellSize));
-  let centerY = Math.floor(canvas.height / (2 * cellSize));
+  let centerX = Math.floor(gridX / 2);
+  let centerY = Math.floor(gridY / 2);
 
   for (let x = 0; x < gridX; x++) {
     for (let y = 0; y < gridY; y++) {
       let distX = Math.abs(x - centerX);
       let distY = Math.abs(y - centerY);
-      let distance = Math.max(distX, distY);
-      let colorIndex = (distance + Math.max(distX, distY)) % userColors.length;
+      let distance = distX + distY; // Manhattan distance
+      let colorIndex = distance % userColors.length;
       ctx.fillStyle = userColors[colorIndex];
       ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
     }
   }
 }
+
+function xPattern() {
+  let cellSize = Math.min(canvas.width / gridX, canvas.height / gridY);
+  let centerX = Math.floor((gridX - 1) / 2);
+  let centerY = Math.floor((gridY - 1) / 2);
+
+  for (let x = 0; x < gridX; x++) {
+    for (let y = 0; y < gridY; y++) {
+      // Calculate distance to the diagonals relative to the center
+      let dist1 = Math.abs(x - centerX - (y - centerY));
+      let dist2 = Math.abs(x - centerX + (y - centerY));
+      let distance = Math.min(dist1, dist2);
+      let colorIndex = distance % userColors.length;
+      ctx.fillStyle = userColors[colorIndex];
+      ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+    }
+  }
+}
+
+function checkerboardGradientPattern() {
+  let cellSize = Math.min(canvas.width / gridX, canvas.height / gridY);
+
+  // Function to convert hex color to RGB and calculate luminance
+  function getLuminance(hex) {
+    let rgb = parseInt(hex.slice(1), 16);
+    let r = (rgb >> 16) & 0xff;
+    let g = (rgb >> 8) & 0xff;
+    let b = (rgb >> 0) & 0xff;
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+
+  // Sort userColors array by luminance (light to dark)
+  userColors.sort((a, b) => getLuminance(a) - getLuminance(b));
+
+  for (let y = 0; y < gridY; y++) {
+    let rowColor = userColors[Math.floor((y / gridY) * userColors.length)];
+    for (let x = 0; x < gridX; x++) {
+      ctx.fillStyle =
+        x % 2 === 0 && y % 2 === 0
+          ? rowColor
+          : userColors[
+              (Math.floor((y / gridY) * userColors.length) + 1) %
+                userColors.length
+            ];
+      ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+    }
+  }
+}
+// ==== End of Pattern Functions ====
 
 function addColor() {
   userColors.push(colorPicker.value);
@@ -69,13 +125,10 @@ function updateCanvasSize() {
   drawGrid();
 }
 
-// Function to update the color pallet
 function updateColorPallet() {
   const colorPallet = document.querySelector(".color-pallet");
-  // Clear the existing content
   colorPallet.innerHTML = "";
 
-  // Loop through the colors array and create color divs
   userColors.forEach((color) => {
     const colorDiv = document.createElement("div");
     colorDiv.classList.add("pallet-item");
@@ -84,7 +137,7 @@ function updateColorPallet() {
   });
 }
 
-let selectedPattern = "diamondPattern"; // Set a default pattern
+let selectedPattern = "diamondPattern";
 
 function selectPattern(pattern) {
   const dropdown = document.querySelector(".dropdown");
@@ -97,15 +150,18 @@ function selectPattern(pattern) {
   }
 
   text.innerHTML = `You selected ${pattern}!`;
+  selectedPattern = pattern;
+  drawGrid();
 }
 
 function getPatternAlgorithm(patternName) {
   switch (patternName) {
-    case "diamondPattern":
+    case "diamond":
       return diamondPattern;
-    case "spiralPattern":
-      return spiralPattern;
-    // Add more pattern cases here
+    case "gradient":
+      return checkerboardGradientPattern;
+    case "x":
+      return xPattern;
     default:
       return diamondPattern;
   }
